@@ -181,8 +181,9 @@ def appendCSV(book, fileTuple):
 
 	for city in book.cities:
 		cityFields = [book.bookID, city]
-        cWriter = csv.writer(fileTuple.cities)
-		cWriter.writerow(cityFields)
+        
+	cWriter = csv.writer(fileTuple.cities)
+	cWriter.writerow(cityFields)
 
 
 
