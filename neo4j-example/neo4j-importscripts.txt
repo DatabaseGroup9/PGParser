@@ -1,25 +1,25 @@
 USING PERIODIC COMMIT
-LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/DatabaseGroup9/PGParser/master/books.csv" AS row
+LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/DatabaseGroup9/PGParser/master/neo4j-example/neo4j-books.csv" AS row
 MERGE (:Book {id: row.bookID, author: toInt(row.author), title: row.title});
 
 USING PERIODIC COMMIT
-LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/DatabaseGroup9/PGParser/master/authors.csv" AS row
+LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/DatabaseGroup9/PGParser/master/neo4j-example/neo4j-authored.csv" AS row
 MERGE (:Author {id: row.authorID, name: row.name});
 
 USING PERIODIC COMMIT
-LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/DatabaseGroup9/PGParser/master/authors.csv" AS row
+LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/DatabaseGroup9/PGParser/master/neo4j-example/neo4j-cities.csv" AS row
 MERGE (:City {id: row.cityID, name: row.name});
 
 USING PERIODIC COMMIT 5000
-LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/datsoftlyngby/soft2018spring-databases-teaching-material/master/data/social_network_edges_small.csv" AS row
-MATCH (b:-book {id: row.bookID}), 
+LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/DatabaseGroup9/PGParser/master/neo4j-example/neo4j-authored.csv" AS row
+MATCH (b:Book {id: row.bookID}), 
                       (a:Author {id: row.authorID})
 CREATE (a)-[:AUTHORED]->(b);
 
 
 
 USING PERIODIC COMMIT 5000
-LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/datsoftlyngby/soft2018spring-databases-teaching-material/master/data/social_network_edges_small.csv" AS row
-MATCH (b:-book {id: row.bookID}), 
+LOAD CSV WITH HEADERS FROM "https://raw.githubusercontent.com/DatabaseGroup9/PGParser/master/neo4j-example/neo4j-mentions.csv" AS row
+MATCH (b:Book {id: row.bookID}), 
                       (c:City {name: row.city})
 CREATE (b)-[:MENTIONS {mentions:row.city}]->(c);
