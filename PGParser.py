@@ -16,11 +16,11 @@ IS_DEBUG = False
 USE_GEOTEXT = 'GEOTEXT'
 USE_NLTK = 'NLTK'
 
-BOOKS_CSV = 'data/books.csv'
-CITIES_CSV = 'data/mentions.csv'
 AUTHORS_CSV = 'data/authors.csv'
 WROTE_CSV = 'data/wrote.csv'
+BOOKS_CSV = 'data/books.csv'
 MENTIONED_CSV = 'data/mentioned.csv'
+CITIES_CSV = 'data/c.csv'
 
 GEOCITIES_CSV = 'data/cities1000.txt'
 
