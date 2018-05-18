@@ -1,0 +1,55 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://atlas.hashicorp.com/search.
+ # config.vm.box = "ubuntu/xenial64"
+ 
+ ## DO
+ 
+  config.vm.box = 'digital_ocean'
+  config.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
+  config.ssh.private_key_path = '~/.ssh/id_rsa'
+  
+ ## END DO
+
+  
+	[0,1,2].each do | machine|
+		config.vm.define "mydroplet#{machine}" do | machine_idx|
+			machine_idx.vm.provider :digital_ocean do |provider|
+			  provider.ssh_key_name = "eacl"
+			  provider.token = '34b1050d0551f027a2115f0e35872f2c0c2df35cdb8890de334438da8a82ac6e'
+			  provider.image = 'ubuntu-16-04-x64'
+			  provider.region = 'fra1'
+			  provider.size = '1gb'
+			  provider.setup = false
+			  provider.privatenetworking = true
+			end
+			
+	
+			
+			
+		machine_idx.vm.provision "shell", privileged: false, inline: <<-SHELL
+			mkdir out
+			# chmod u+x ./scrape.sh
+			echo "===============================DONE============================================"
+			echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHNp6gDwQrcpiOW2D5gWnpawNvhjsoA3wZUdKwEC6LhQ/l/DwLSc1olZ3XALgs6flnqJD9d4VMQ6AecjBtldgNHg50m0DvfHONjdzrWcsFcbJqz93RQ1r6MahXWY67kUQJ9r+VeMoJxR0yla/nplHhk8Tnrn8c7IiJEaPlQdpP/Rxgj2aUbu0a/7DcVYwTZjCKfP56Ax9WFEhr33rxUHRhSjDRj5+I10O8Yo8MXcTu13mbAUHZ2vMxQFZlwGp95n5g0GUd6q9FsmErBHsMNm6HeOMgkMmXQf5JqgHbRkh14o4LPRADFdVXCNswBhpZKVrl9IpskRMkghPD6uw3MTJB cph-el69@cphbusiness.dk" >> /root/.ssh/authorized_keys
+			echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDpBtnbqqiQCLRCL3At4KdpXQCjHUo/7XryT/ES2OK0F2B2/+GG1WEWmqFEv9h9/rUOgoeoYPNZ+4SiA3H2ItZT24nKQnX3ytTLDh9S238hgQEOrc8eKYdxXo73fY7zSJ71mwGuHQWt+jnJ6pSsGNz5rcFCE5rcgVcePYKxUn4iDlrZFnHMzHNqsNNV6e6kYkJTYjnpFfKap1792ayBFsNDEY3fKVB4TLvcmK67RKzWlpky/Rs81ZA3UCXRGTwP9G6spasldSPGx7AK3AW5Q5q3VmVk5A7Cvjl2An0l4Ogrpm/syvUUSz7M09T5AoGAvT7cGHa+NJHp59iR22VnpbHF cph-kg99@cphbusiness.dk"  >> /root/.ssh/authorized_keys
+			echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC4zFj7/aAi3immIyhzEScRT//UYYF/jubW9wG23cwf3rmaLqv7l/T4nA9BwF7ih+LH1uHF/OnFavBZNJe8UjG6baJ2BrjX+Bpkv21kAG8yLdWtncK8P/4tQ2ioyPmTzW0La6C0zDwi7oUGQWZVM/fNDW9gFFLd89TwwO4TCB6XZ6cWF89Gy1mAOml5hf4ZGm9JIMtjzXI0TmnVkLlijBnbnvbjYzxQ617KbUUtcWESI1omupElE0UjhAr44CEjFIRaWi0004YReOeEokPVKh3R+cqz5tRWzcan8Y1tjZGwSL+o3KC4BwWtI5BjpOjsdaiUt5YStxZQVBS1lU3UJnSF che@cjsbeau-LenovoY700"  >> /root/.ssh/authorized_keys
+			echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCmAdnfBz9YIaSU7J7OPRwH7NSzWnkCmKtEYScKes/xx3GvF+nxCN7LiyD8F2nhOnZcSk1sRhYDF2bzDF0H6JjPbU+hOXtBEISqyTCTLIN5QpWLXQF37vkkA8LTtldz2MI1Nwq5JcDRh8LhKMD4sx7dhsjobm23Qvk/T8zMnAPpqGSW2Sb/kUvwOFFryP5WECvd80Q7BGsrWzFDXeBTSrvL/+wbFZfEGJGtuzQrabmvm7S8OUnW9uXqYfwNXKImiKxZEbX9OSdLOuQFMBZ7VsrN0psVxSxJXBmuX+wN73qaEEKiO0oxzuPYj0p41WGIitGuhlfXSvwmuEs0+of24M/FZ8krcrCu0C0MJIeDHcvy98CJaqAzLviVrLlTUbnS8CDJNDeah5Y7ro7u/4cvuR59R9D5fierq7PxsaYPRJA6VK5uKV7CCxMtGp0xx97hUlP9gN5S1S1bicBVVsXWs9ejlYA9OmCoQAL7mLZqXYPX6brCLp6/SBitGlk/zmFDHq0wA72CcFhz5GGBtlhkOiQjobU+6KfS/tC7pGADu8XG7qqFzh+Jje+bdfEum+3kGbZFPLK8nqowJ61IxDs6Tj9qV0gN0298v6UGN6qd+ynpyPXBzDSLKhg5jvoa96NeHcHNfzxDKFhQWDYEMDrUx59moblsls1KXUORGUA8pHjOyQ== cph-as283@cphbusiness.dk"  >> /root/.ssh/authorized_keys
+
+	
+		SHELL
+		end
+    end
+
+end  
