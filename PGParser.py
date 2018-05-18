@@ -1,16 +1,24 @@
 #!/bin/env python
 import re, io, os, csv, zipfile, codecs, subprocess, rdflib, logging, nltk, re, pprint
 from collections import Counter
+from shutil import copy
 from geotext import GeoText
 from nltk import word_tokenize, sent_tokenize
+
+import argparse, sys
+
+parser=argparse.ArgumentParser()
+
+parser.add_argument('--skip', help='How many books to skip? [positive int]')
+parser.add_argument('--take', help='How many books to parse, starting from --skip? [positive int]')
+__arguments=parser.parse_args()
 
 # nltk.download('words')
 # nltk.download('punkt')
 # nltk.download('averaged_perceptron_tagger')
 # nltk.download('maxent_ne_chunker')
 
-
-ARCHIVES_PATH = 'data/archive/root/zipfiles'
+ARCHIVES_PATH = 'data/archive.full/root/zipfiles'
 RDF_PATH = 'data/rdf-files/cache/epub/'
 IS_DEBUG = False
 USE_GEOTEXT = 'GEOTEXT'
@@ -20,7 +28,7 @@ AUTHORS_CSV = 'data/authors.csv'
 WROTE_CSV = 'data/wrote.csv'
 BOOKS_CSV = 'data/books.csv'
 MENTIONED_CSV = 'data/mentioned.csv'
-CITIES_CSV = 'data/c.csv'
+CITIES_CSV = 'data/cities.csv'
 
 GEOCITIES_CSV = 'data/cities1000.txt'
 
@@ -125,13 +133,14 @@ def traverseArchive():
     errorCount = 0
     folderPath = ARCHIVES_PATH
     
-    for fileName in os.listdir(folderPath):
+    for fileName in handleSkipTake(os.listdir(folderPath)):
         zipFilePath = folderPath + '/' + fileName
         with zipfile.ZipFile(zipFilePath, 'r') as archive:
             for innerFileName in archive.namelist():
                 if innerFileName.endswith('.txt'):
                     print(innerFileName)
                     bookID = os.path.splitext(innerFileName)[0]
+                    error = False
                     try:
                         #archive.testzip()
                         #parseText(codecs.encode(archive.read(innerFileName), 'utf-8'))
@@ -141,13 +150,30 @@ def traverseArchive():
                     except NotImplementedError:
                         print("NotImplementedError. Possibly wrong compression, Trying System call")
                         #unzipAndParse(zipFilePath ,innerFileName)
+                        error = True
                         errorCount += 1
                     except IndexError:
                         print('Unexpected first line.')
+                        error = True
                         errorCount += 1
+                    
+                    if error:
+                        copy(zipFilePath, "data/failed/" + fileName)
                         
     print(str(errorCount) + ' archives could not be opened.')
 
+def handleSkipTake(list):
+    skip = int(__arguments.skip)
+    take = int(__arguments.take)
+    
+    if int(__arguments.skip) > 0:
+        list = list[skip:]
+        
+    if take > 0:
+        list = list[:take]
+    
+    
+    return list
     
 def unzipAndParse(filePath, innerFile):
     bookID = os.path.splitext(innerFile)[0]
@@ -331,41 +357,44 @@ def exportAll():
             # item = myDict[key]
             # writer.writerow([item.__dict__[field] for field in fieldNames])
         
+def escapeEncode(list):
+	return [str(val).encode('unicode_escape').decode('ASCII') for val in list]
+		
 def exportCSVs():
     with open(BOOKS_CSV, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerow(['bookID', 'title'])
         for key in sorted(__books, key=lambda k: __books[k].bookID):
             book = __books[key]
-            writer.writerow([book.bookID, book.title])
+            writer.writerow(escapeEncode([book.bookID, book.title]))
         
     with open(MENTIONED_CSV, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerow(['bookID', 'cityID', 'count'])
         for key in sorted(__mentioneds ):
             mentioned = __mentioneds[key]
-            writer.writerow([mentioned.bookID, mentioned.cityID, mentioned.count])
+            writer.writerow(escapeEncode([mentioned.bookID, mentioned.cityID, mentioned.count]))
             
     with open(CITIES_CSV, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerow(['cityID', 'name', 'lat', 'lon'])
         for key in sorted(__cities, key=lambda k: int(__cities[k].cityID)):
             city = __cities[key]
-            writer.writerow([city.cityID, city.name, city.lat, city.lon])
+            writer.writerow(escapeEncode([city.cityID, city.name, city.lat, city.lon]))
     
     with open(AUTHORS_CSV, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerow(['authorID', 'fullName', 'firstName', 'surName', 'title'])
         for key in sorted(__authors, key=lambda k: __authors[k].authorID):
             author = __authors[key]
-            writer.writerow([author.authorID, author.fullName, author.firstName, author.surName, author.title])
+            writer.writerow(escapeEncode([author.authorID, author.fullName, author.firstName, author.surName, author.title]))
             
     with open(WROTE_CSV, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
         writer.writerow(['authorID', 'bookID'])
         for key in sorted(__wrotes, key=lambda k: (__wrotes[k].authorID, __wrotes[k].bookID)):
             wrote = __wrotes[key]
-            writer.writerow([wrote.authorID, wrote.bookID])
+            writer.writerow(escapeEncode([wrote.authorID, wrote.bookID]))
     
     # for mention in sorted(__mentioneds ):
         # print(__mentioneds[mention])
