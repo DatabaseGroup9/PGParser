@@ -1,7 +1,7 @@
 echo 'Copying zipFileLinks.txt:';
 scp root@$1:/root/zipfileLinks.txt zipfileLinks.txt;
 echo 'Finished.\nCopying archive.tar:';
-scp root@$1:/root/archive.tar archive.tar;
+wget http://46.101.192.243:8080/books/archive.tar
 echo 'unzipping archive.tar'
 unzip -n archive.tar -d data
 echo 'done fetching book data.';
