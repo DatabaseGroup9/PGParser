@@ -7,6 +7,4 @@ for i in ${fileList}; do
 	echo "" | tail -f >> headers.txt;
 done
 cat headers.txt
-echo "Zipping: "
-zip data.zip headers.txt authors.csv wrote.csv books.csv mentioned.csv cities.csv
 cd ..

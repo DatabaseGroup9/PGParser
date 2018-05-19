@@ -41,6 +41,7 @@ __authorsCount = 0
 __wrotes = {}
 __mentioneds = {}
 
+STRIP_LOWERCASE = True
 WHICH_PARSER = USE_GEOTEXT
 
 #Book class. Contains metadata, full text and list of cities when populated.
@@ -151,14 +152,16 @@ def traverseArchive():
                         print("NotImplementedError. Possibly wrong compression, Trying System call")
                         #unzipAndParse(zipFilePath ,innerFileName)
                         error = True
-                        errorCount += 1
                     except IndexError:
                         print('Unexpected first line.')
                         error = True
-                        errorCount += 1
+                    except IOError:
+                        print("No RDF data found for this book")
+                        error = True
                     
                     if error:
                         copy(zipFilePath, "data/failed/" + fileName)
+                        errorCount += 1
                         
     print(str(errorCount) + ' archives could not be opened.')
 
@@ -200,6 +203,7 @@ def getMetadataFromRDF(book):
     except IOError:
         print('RDF archive for ' + book.bookID + ' not found. Has the whole archive been correctly decompressed?')
         print('Trying to parse metadata directly from book Text')
+        raise IOError('No such RDF')
         #return tryParseMetadata(book)
     
     #DO WE HAVE A BIRTHDAY TO SEPARATE AUTHORS BY?
@@ -219,6 +223,12 @@ def getMetadataFromRDF(book):
 
     return book
 
+def cleanUpBook(book):
+    if STRIP_LOWERCASE == True:
+        print("")
+        #TODO REMOVE ALL LOWERCASE WORDS
+    return book
+    
 def removeHeader(book):
     #TODO IMPLEMENT HEADER REMOVAL?
     return book
@@ -358,8 +368,8 @@ def exportAll():
             # writer.writerow([item.__dict__[field] for field in fieldNames])
         
 def escapeEncode(list):
-	return [str(val).encode('unicode_escape').decode('ASCII') for val in list]
-		
+    return [str(val).replace('"', '').encode('unicode_escape').decode('ASCII') for val in list]
+        
 def exportCSVs():
     with open(BOOKS_CSV, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',')
