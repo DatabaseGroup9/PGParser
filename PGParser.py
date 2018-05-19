@@ -41,7 +41,10 @@ __authorsCount = 0
 __wrotes = {}
 __mentioneds = {}
 
-STRIP_LOWERCASE = True
+__skip = -1
+__take = -1
+
+STRIP_LOWERCASE = False
 WHICH_PARSER = USE_GEOTEXT
 
 #Book class. Contains metadata, full text and list of cities when populated.
@@ -166,14 +169,17 @@ def traverseArchive():
     print(str(errorCount) + ' archives could not be opened.')
 
 def handleSkipTake(list):
-    skip = int(__arguments.skip)
-    take = int(__arguments.take)
+    global __skip
+    global __take
     
-    if int(__arguments.skip) > 0:
-        list = list[skip:]
+    __skip = int(__arguments.skip)
+    __take = int(__arguments.take)
+    
+    if __skip > 0:
+        list = list[__skip:]
         
-    if take > 0:
-        list = list[:take]
+    if __take > 0:
+        list = list[:__take]
     
     
     return list
@@ -322,12 +328,12 @@ def addAuthor(author):
     
     if not author.getKey() in __authors:
         __authorsCount += 1
-        author.authorID = __authorsCount
+        offset = str(__skip) if __skip > -1 else ""
+        author.authorID = offset + str(__authorsCount)
         __authors[author.getKey()] = author
-    else:
-    
+    else:  
         author.authorID = __authors[author.getKey()].authorID
-    
+
     return author
   
 def addWrote(authorID, bookID):
