@@ -18,7 +18,7 @@ __arguments=parser.parse_args()
 # nltk.download('averaged_perceptron_tagger')
 # nltk.download('maxent_ne_chunker')
 
-ARCHIVES_PATH = 'data/archive.full/root/zipfiles'
+ARCHIVES_PATH = 'data'
 RDF_PATH = 'data/rdf-files/cache/epub/'
 IS_DEBUG = False
 USE_GEOTEXT = 'GEOTEXT'
