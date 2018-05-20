@@ -1,0 +1,62 @@
+## Useful commands
+
+mated.csv >> unicode.text
+
+
+
+sort fullauthors_formated.csv  | uniq -d >> fullauthors_formated_d.csv
+sort fullauthors_formated.csv  | uniq -u  >> fullauthors_formated_x.csv
+
+# Add prefix to authors because the ids will not be unique otherwise.
+
+sed 's/^/A/' ./data4500-500/authors.csv >> fullauthors_pre.csv
+sed 's/^/A/' ./data4500-500/wrote.csv >> fullwrote_pre.csv
+
+sed 's/^/B/' ./data4000-500/authors.csv >> fullauthors_pre.csv
+sed 's/^/B/' ./data4000-500/wrote.csv >> fullwrote_pre.csv
+
+sed 's/^/C/' ./data3500-500/authors.csv  >> fullauthors_pre.csv
+sed 's/^/C/' ./data3500-500/wrote.csv >> fullwrote_pre.csv
+
+sed 's/^/D/' ./data3000-500/authors.csv >> fullauthors_pre.csv
+sed 's/^/D/' ./data3000-500/wrote.csv >> fullwrote_pre.csv
+
+sed 's/^/E/' ./data2500-500/authors.csv >> fullauthors_pre.csv
+sed 's/^/E/' ./data2500-500/wrote.csv >> fullwrote_pre.csv
+
+
+sed 's/^/F/' ./data2000-500/authors.csv >> fullauthors_pre.csv
+sed 's/^/F/' ./data2000-500/wrote.csv >> fullwrote_pre.csv
+
+
+sed 's/^/G/' ./data1500-500/authors.csv >> fullauthors_pre.csv
+sed 's/^/G/' ./data1500-500/wrote.csv >> fullwrote_pre.csv
+
+
+sed 's/^/H/' ./data1000-500/authors.csv >> fullauthors_pre.csv
+sed 's/^/H/' ./data1000-500/wrote.csv >> fullwrote_pre.csv
+
+sed 's/^/J/' ./data0-500/authors.csv >> fullauthors_pre.csv
+sed 's/^/J/' ./data0-500/wrote.csv >> fullwrote_pre.csv
+
+# cat books
+
+head -1 ./data*/books.csv > fullbooks.csv
+tail -n +2 ./data*/books.csv >> fullbooks.csv
+
+
+head -1 ./data*/mentioned.csv > fullmentioned.csv
+tail -n +2 ./data*/mentioned.csv >> fullmentioned.csv
+
+
+
+
+head -1  ./data4500-500/cities.csv > fullcities.csv
+tail -n +2 ./data*/cities.csv >> fullcities.csv
+sort fullcities.csv | uniq -d -s1  >> fullcities_d.csv
+sort fullcities.csv | uniq -u -s1  >> fullcities_u.csv
+head -1  fullcities.csv > fullcities.csv
+tail -n +2 fullcities_d.csv >> fullcities2.csv
+tail -n +2 fullcities_u.csv >> fullcities2.csv
+rm fullcities_d.csv
+rm fullcities_u.csv
