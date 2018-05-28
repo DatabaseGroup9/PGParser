@@ -6,23 +6,26 @@ This is a Virtual Machine, that fetches the ~5GB downloaded Project Gutenberg bo
 1. Clone the repository PGParser.
 2. Git Bash in PGParser directory: <br>
  sudo chmod 700 *<br>
-`./runMe.sh  or ./runMe.sh > outerLog.txt 2>&1 & <br>
-
-scp root@178.62.239.18:~/tmp/other/PGParser_proper/PGParser/data/data*.zip .
+2. execute "./runMe.sh > outerLog.txt 2>&1 &"<br>
 
 The script runs for several hours and when completed the extracted datat saved in approximately 76 zip archives.
+All output is logged in outerLog.txt
 
 We then concatenate the files into one csv-file an upload to our [GitHub import repository](https://github.com/DatabaseGroup9/dataimport/tree/master/data).
+
+to fetch the finished CSVs from the server, scp root@178.62.239.18:~/tmp/other/PGParser_proper/PGParser/data/data*.zip .
+Usually however, formatting is done on the PGParser droplet, with the files in ./formatdata
+
+This results in duplicate cities and authors, which will have to be cleaned up later in the process.
 
 #### The parser script
 
 [PGParser.py](https://github.com/DatabaseGroup9/PGParser/blob/master/PGParser.py) is the script that extracts the booktiltes, authors, cities and number of cities mentions in a book.
 
-We have used the strategy to identify Capitalized text and running them through the python library Geotext to deterind if it's a city or not.
+We have used the strategy to identify Capitalized text and running them through the python library Geotext to deterind if it's a city or not. This saves some time over running the entire corpus through geotext
 
 
-
-Previous instructions:
+##Instructions for old version:
 ### Steps:
 1. Clone the repository PGParser.
 2. Get the IP address 178.62.99.117.
