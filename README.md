@@ -1,5 +1,5 @@
 # PGParser
-This is a Virtual Machine, that fetches downloaded Project Gutenberg book files and parses them to .csv.
+This is a Virtual Machine, that fetches the ~5GB downloaded Project Gutenberg book files and parses them to .csv.
 
 
 ### Steps:
