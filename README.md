@@ -25,7 +25,7 @@ This results in duplicate cities and authors, which will have to be cleaned up l
 We have used the strategy to identify Capitalized text and running them through the python library Geotext to deterind if it's a city or not. This saves some time over running the entire corpus through geotext
 
 
-##Instructions for old version:
+## Instructions for old version:
 ### Steps:
 1. Clone the repository PGParser.
 2. Get the IP address 178.62.99.117.
