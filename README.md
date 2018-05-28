@@ -1,6 +1,7 @@
 # PGParser
 This is a Virtual Machine, that fetches the ~5GB downloaded Project Gutenberg book files and parses them to .csv.
 
+Due to memory constraints, the easiest way to run the parser is with the batch script (runMe.sh), which parses the books in batches of 500 zipfiles at a time. This results in duplicate cities and authors, which will have to be cleaned up later in the process.
 
 ### Steps:
 1. Clone the repository PGParser.
@@ -16,13 +17,13 @@ We then concatenate the files into one csv-file an upload to our [GitHub import 
 to fetch the finished CSVs from the server, scp root@178.62.239.18:~/tmp/other/PGParser_proper/PGParser/data/data*.zip .
 Usually however, formatting is done on the PGParser droplet, with the files in ./formatdata
 
-This results in duplicate cities and authors, which will have to be cleaned up later in the process.
-
 #### The parser script
 
 [PGParser.py](https://github.com/DatabaseGroup9/PGParser/blob/master/PGParser.py) is the script that extracts the booktiltes, authors, cities and number of cities mentions in a book.
 
-We have used the strategy to identify Capitalized text and running them through the python library Geotext to deterind if it's a city or not. This saves some time over running the entire corpus through geotext
+It iterates over the zipfiles fetched from book_downloader droplet, and looks for metadata for each one in the RDF files downloaded from Project Gutenberg's website. This data is all created as objects (PGAuthor, PGWrote, PGBook, PGMentioned and PGCity) and inserted into various collections, before being exported to the five different CSV files. 
+
+We have used the strategy to identify Capitalized text and running them through the python library Geotext to determine if it's a city or not. This saves some time over running the entire corpus through geotext.
 
 
 ## Instructions for old version:
