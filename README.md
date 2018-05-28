@@ -12,7 +12,7 @@ scp root@178.62.239.18:~/tmp/other/PGParser_proper/PGParser/data/data*.zip .
 
 The script runs for several hours and when completed the extracted datat saved in approximately 76 zip archives.
 
-We then concatenate the files into one csv-file an upload to our GitHub repository.
+We then concatenate the files into one csv-file an upload to our [GitHub import repository](https://github.com/DatabaseGroup9/dataimport/tree/master/data).
 
 
 Previous instructions:
