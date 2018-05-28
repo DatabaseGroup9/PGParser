@@ -14,6 +14,13 @@ The script runs for several hours and when completed the extracted datat saved i
 
 We then concatenate the files into one csv-file an upload to our [GitHub import repository](https://github.com/DatabaseGroup9/dataimport/tree/master/data).
 
+#### The parser script
+
+[PGParser.py](https://github.com/DatabaseGroup9/PGParser/blob/master/PGParser.py) is the script that extracts the booktiltes, authors and cities and number of cities mentions in a book.
+
+We have used the strategy to identify Capitalized text and running them through the python library Geotext to deterind if it's a city or not.
+
+
 
 Previous instructions:
 ### Steps:
