@@ -16,7 +16,7 @@ We then concatenate the files into one csv-file an upload to our [GitHub import 
 
 #### The parser script
 
-[PGParser.py](https://github.com/DatabaseGroup9/PGParser/blob/master/PGParser.py) is the script that extracts the booktiltes, authors and cities and number of cities mentions in a book.
+[PGParser.py](https://github.com/DatabaseGroup9/PGParser/blob/master/PGParser.py) is the script that extracts the booktiltes, authors, cities and number of cities mentions in a book.
 
 We have used the strategy to identify Capitalized text and running them through the python library Geotext to deterind if it's a city or not.
 
